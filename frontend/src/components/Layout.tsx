@@ -4,25 +4,38 @@ import CreateModal from "./CreateModal";
 
 interface LayoutProps {
   children: ReactNode;
+  activeTab: "home" | "profile";
+  onNavigate: (tab: "home" | "profile") => void;
 }
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout = ({ children, activeTab, onNavigate }: LayoutProps) => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
+  const navItemClass = (isActive: boolean) =>
+    `flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all ${
+      isActive
+        ? "bg-gray-50 text-[#262626]"
+        : "text-[#262626] hover:bg-gray-50 hover:translate-x-[1px]"
+    }`;
+
   return (
-    <div className="min-h-screen bg-[#fafafa] text-gray-900">
-      <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-[240px] lg:flex-col lg:border-r lg:border-gray-200 lg:bg-white">
-        <div className="px-6 py-8 text-2xl font-semibold">InstaClone</div>
+    <div className="min-h-screen bg-[#fafafa] text-[#262626]">
+      <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-[244px] lg:flex-col lg:border-r lg:border-[#dbdbdb] lg:bg-white">
+        <div className="px-6 py-8 text-2xl font-semibold tracking-tight">InstaClone</div>
         <nav className="flex flex-1 flex-col gap-2 px-4">
           <a
-            className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100"
+            className={navItemClass(activeTab === "home")}
             href="#"
+            onClick={(event) => {
+              event.preventDefault();
+              onNavigate("home");
+            }}
           >
             <Home className="h-5 w-5" />
             Home
           </a>
           <button
-            className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100"
+            className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-[#262626] transition-all hover:bg-gray-50 hover:translate-x-[1px]"
             type="button"
             onClick={() => setIsCreateOpen(true)}
           >
@@ -30,8 +43,12 @@ const Layout = ({ children }: LayoutProps) => {
             Create
           </button>
           <a
-            className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100"
+            className={navItemClass(activeTab === "profile")}
             href="#"
+            onClick={(event) => {
+              event.preventDefault();
+              onNavigate("profile");
+            }}
           >
             <User className="h-5 w-5" />
             Profile
@@ -39,25 +56,33 @@ const Layout = ({ children }: LayoutProps) => {
         </nav>
       </div>
 
-      <main className="flex min-h-screen justify-center px-4 pb-20 pt-8 lg:pl-[240px]">
+      <main className="flex min-h-screen justify-center px-4 pb-20 pt-8 lg:pl-[244px]">
         <div className="w-full max-w-[470px]">{children}</div>
       </main>
 
-      <div className="fixed inset-x-0 bottom-0 border-t border-gray-200 bg-white lg:hidden">
+      <div className="fixed inset-x-0 bottom-0 border-t border-[#dbdbdb] bg-white lg:hidden">
         <div className="mx-auto flex max-w-[470px] items-center justify-between px-8 py-3">
-          <button className="flex flex-col items-center text-xs text-gray-900" type="button">
+          <button
+            className="flex flex-col items-center text-xs text-[#262626] transition-transform hover:scale-105"
+            type="button"
+            onClick={() => onNavigate("home")}
+          >
             <Home className="h-5 w-5" />
             Home
           </button>
           <button
-            className="flex flex-col items-center text-xs text-gray-900"
+            className="flex flex-col items-center text-xs text-[#262626] transition-transform hover:scale-105"
             type="button"
             onClick={() => setIsCreateOpen(true)}
           >
             <PlusSquare className="h-5 w-5" />
             Create
           </button>
-          <button className="flex flex-col items-center text-xs text-gray-900" type="button">
+          <button
+            className="flex flex-col items-center text-xs text-[#262626] transition-transform hover:scale-105"
+            type="button"
+            onClick={() => onNavigate("profile")}
+          >
             <User className="h-5 w-5" />
             Profile
           </button>
